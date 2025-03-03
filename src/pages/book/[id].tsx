@@ -1,11 +1,40 @@
 import { useRouter } from 'next/router';
 import style from './[id].module.css';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import {
+  GetServerSidePropsContext,
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+} from 'next';
 import fetchOneBooks from '@/lib/fetch-one-books';
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+// SSR
+// export const getServerSideProps = async (
+//   context: GetServerSidePropsContext
+// ) => {
+//   const id = context.params!.id;
+//   const book = await fetchOneBooks(Number(id));
+
+//   return {
+//     props: { book },
+//   };
+// };
+
+// SSG
+export const getStaticPaths = () => {
+  return {
+    paths: [
+      { params: { id: '1' } }, // url 파라미터의 값들은 Next 문법상 반드시 string 으로 설정해야함
+      { params: { id: '2' } },
+      { params: { id: '3' } },
+    ],
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async (context: GetStaticPropsContext) => {
   const id = context.params!.id;
   const book = await fetchOneBooks(Number(id));
 
@@ -17,7 +46,7 @@ export const getServerSideProps = async (
 // 동적인 URL 파라미터를 사용하는 페이지에서는 [name].tsx 형식으로 파일 생성
 export default function Page({
   book,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   // const router = useRouter();
   // const queryString = router.query.id;
   // console.log(queryString);
