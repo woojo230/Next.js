@@ -32,13 +32,10 @@ export const getStaticPaths = () => {
       { params: { id: '3' } },
     ],
     // ↓: fallback(SSG) 옵션들
-    // fallback: true,
+    fallback: true,
     // false: 404 NotFound
     // blocking: SSR 방식으로 실시간 페이지 생성(사전 랜더링)
     // true: fallback 상태의 페이지(Props 데이터가 없는 상태의 페이지)부터 생성해 보내 줌
-
-    // ↓: ISR (증분 정적 재생성, 쉽게 말해 일정 시간마다 재생성)
-    revalidate: 3,
   };
 };
 
